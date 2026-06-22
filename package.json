@@ -6,7 +6,7 @@
   "scripts": {
     "install:all": "npm install --prefix server && npm install --prefix client",
     "build": "npm install; cd client && npm install --include=dev && npm run build && cd ../server && npm install --include=dev && npx prisma generate && npx prisma migrate deploy",
-    "start": "npm run start",
+    "start": "node server/src/index.js",
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
     "seed": "npm run seed --prefix server"
