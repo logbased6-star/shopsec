@@ -15,7 +15,8 @@ const { generalLimiter } = require("./middleware/rateLimiter");
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
-
+import merakiRoutes from './routes/meraki.js';
+app.use('/api/meraki', merakiRoutes);
 // Render/Railway sit behind a reverse proxy - this makes req.ip reflect
 // the real client IP (critical for accurate security logging).
 app.set("trust proxy", 1);
