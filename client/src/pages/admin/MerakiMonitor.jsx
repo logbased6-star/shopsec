@@ -6,26 +6,26 @@ export default function MerakiMonitor() {
   const [security, setSecurity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
+useEffect(() => {
     const token = localStorage.getItem('token');
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = { 
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
 
     Promise.all([
-      fetch('/api/meraki/traffic', { headers }).then(r => r.json()),
-      fetch('/api/meraki/clients', { headers }).then(r => r.json()),
-      fetch('/api/meraki/security', { headers }).then(r => r.json()),
-    ])
-      .then(([t, c, s]) => {
+      fetch('/api/meraki/traffic', { headers }).then(r => r.json()).catch(() => []),
+      fetch('/api/meraki/clients', { headers }).then(r => r.json()).catch(() => []),
+      fetch('/api/meraki/security', { headers }).then(r => r.json()).catch(() => ({ events: [] })),
+    ]).then(([t, c, s]) => {
         setTraffic(Array.isArray(t) ? t : []);
         setClients(Array.isArray(c) ? c : []);
         setSecurity(Array.isArray(s?.events) ? s.events : []);
         setLoading(false);
-      })
-      .catch(err => {
+    }).catch(() => {
         setError('Failed to connect to Meraki API');
         setLoading(false);
-      });
+    });
   }, []);
 
   if (loading) return <p className="p-6 text-soc-muted">Loading Meraki data...</p>;
