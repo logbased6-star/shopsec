@@ -4,8 +4,7 @@ const { protect, adminOnly } = require('../middleware/auth');
 const { getNetworkTraffic, getConnectedClients, getSecurityEvents } = require('../utils/meraki');
 
 const router = express.Router();
-
-router.use(protect, adminOnly);
+router.use(requireAuth, requireAdmin);
 
 router.get('/traffic', async (req, res) => {
   try {
