@@ -104,3 +104,14 @@ model BlockedIp {
   reason    String?
   createdAt DateTime @default(now())
 }
+
+model PortScan {
+  id         Int      @id @default(autoincrement())
+  serverName String
+  serverIp   String
+  port       Int
+  protocol   String
+  status     String   // "open" or "closed"
+  service    String?  // e.g. "http", "ssh", "postgres"
+  scannedAt  DateTime @default(now())
+}
