@@ -1,5 +1,6 @@
 const express = require('express');
-const { protect, adminOnly } = require('../middleware/auth.middleware');
+// const { protect, adminOnly } = require('../middleware/auth.middleware');
+const { protect, adminOnly } = require('../middleware/auth');
 const { getNetworkTraffic, getConnectedClients, getSecurityEvents } = require('../utils/meraki');
 
 const router = express.Router();
