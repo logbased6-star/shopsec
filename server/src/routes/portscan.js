@@ -1,17 +1,15 @@
-import express from 'express';
-import { PrismaClient } from '@prisma/client';
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// POST /api/portscan — your SOC tool sends results here
 router.post('/', async (req, res) => {
   try {
     const { serverName, serverIp, ports } = req.body;
 
-    // ports = [{ port: 80, protocol: "tcp", status: "open", service: "http" }]
     await prisma.portScan.deleteMany({
-      where: { serverName } // clear old results for this server
+      where: { serverName }
     });
 
     await prisma.portScan.createMany({
@@ -31,14 +29,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/portscan — admin panel fetches results
 router.get('/', async (req, res) => {
   try {
     const scans = await prisma.portScan.findMany({
       orderBy: { scannedAt: 'desc' }
     });
 
-    // Group by server name
     const grouped = scans.reduce((acc, scan) => {
       if (!acc[scan.serverName]) {
         acc[scan.serverName] = {
@@ -63,4 +59,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
